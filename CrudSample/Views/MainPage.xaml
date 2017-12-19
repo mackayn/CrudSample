@@ -1,0 +1,91 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:extensions="clr-namespace:CrudSample.Extensions;assembly=CrudSample"
+             xmlns:converters="clr-namespace:CrudSample.Converters;assembly=CrudSample"
+             xmlns:customControls="clr-namespace:CrudSample.CustomControls;assembly=CrudSample"
+             xmlns:b="clr-namespace:Behaviors;assembly=Behaviors"
+             x:Class="CrudSample.Views.MainPage"
+             Title="{Binding AppTitle}">
+
+    <ContentPage.ToolbarItems>
+        <customControls:BindableToolbarItem x:Name="ToolbarItemEdit" Order="Primary" Priority="0"
+                                            Command="{Binding EditCommand}" IsVisible="{Binding IsItemSelected}"
+                                            Icon="{extensions:PlatformImage SourceImage='IconEdit'}" />
+        <customControls:BindableToolbarItem x:Name="ToolbarItemDelete" Order="Primary" Priority="0"
+                                            Command="{Binding DeleteCommand}" IsVisible="{Binding IsItemSelected}"
+                                            Icon="{extensions:PlatformImage SourceImage='IconDelete'}" />
+    </ContentPage.ToolbarItems>
+
+    <Grid RowSpacing="0">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="60" />
+            <RowDefinition Height="2" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <!-- header -->
+        <Grid Grid.Row="0" Grid.RowSpacing="0" Grid.ColumnSpacing="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="60" />
+            </Grid.ColumnDefinitions>
+
+            <Label FontSize="Large" Text="Incidents"
+                   TextColor="{StaticResource UrgentIncident}"
+                   VerticalOptions="Fill"
+                   VerticalTextAlignment="Center"
+                   Margin="10,0,0,0" />
+
+            <Frame Grid.Column="1" HeightRequest="50" WidthRequest="50"
+                   BackgroundColor="{StaticResource UrgentIncident}"
+                   HasShadow="False" OutlineColor="Transparent" Padding="0" CornerRadius="25" VerticalOptions="Center"
+                   HorizontalOptions="Center" Margin="0,5,5,0" InputTransparent="True">
+                <Label Text="{Binding IncidentCount}" TextColor="#FFFFFF" Margin="0" FontSize="Medium"
+                       HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand" />
+            </Frame>
+        </Grid>
+
+        <!-- Seperator -->
+        <BoxView Grid.Row="1" BackgroundColor="{StaticResource SeperatorGrey}" HeightRequest="2" Margin="0"
+                 HorizontalOptions="FillAndExpand" />
+
+        <!-- Detail section -->
+        <AbsoluteLayout Grid.Row="2" Padding="0">
+            <ListView x:Name="ListViewIncidents"
+                      ItemsSource="{Binding Incidents}"
+                      SelectedItem="{Binding SelectedIncident}"
+                      SeparatorColor="{StaticResource SeperatorGrey}">
+                <ListView.Behaviors>
+                    <b:EventHandlerBehavior EventName="ItemTapped">
+                        <b:InvokeCommandAction Command="{Binding SelectCommand}"
+                                               Converter="{converters:SelectedItemEventArgsConverter}" />
+                    </b:EventHandlerBehavior>
+                </ListView.Behaviors>
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <Grid Padding="2" RowSpacing="0">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*" />
+                                    <RowDefinition Height="*" />
+                                </Grid.RowDefinitions>
+                                <Label Text="{Binding ReportDetails}" VerticalTextAlignment="Center"
+                                       LineBreakMode="TailTruncation" FontSize="Medium" />
+                                <Label Grid.Row="1" Text="{Binding IncType}" VerticalTextAlignment="Center"
+                                       LineBreakMode="TailTruncation" FontSize="Small" />
+                            </Grid>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+            <customControls:ImageButton
+                Source="{extensions:PlatformImage SourceImage='IconFAB'}"
+                Command="{Binding AddCommand}" HeightRequest="60" WidthRequest="60"
+                AbsoluteLayout.LayoutFlags="PositionProportional"
+                AbsoluteLayout.LayoutBounds="1.0,1.0,-1,-1"
+                Margin="10" />
+        </AbsoluteLayout>
+    </Grid>
+</ContentPage>

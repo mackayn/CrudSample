@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             Title="{Binding EditMode, StringFormat='Incident ({0})'}"
+             xmlns:customControls="clr-namespace:CrudSample.CustomControls;assembly=CrudSample"
+             x:Class="CrudSample.Views.IncidentEditor">
+    <Grid RowSpacing="0">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="2"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+        </Grid.RowDefinitions>
+
+        <customControls:BindablePicker ItemsSource="{Binding IncidentTypes}" Margin="5" Title="Select a type"
+                                       SelectedItem="{Binding SelectedIncident.IncType}"></customControls:BindablePicker>
+
+        <Frame Grid.Row="1" Margin="5" Padding="0" HasShadow="False" BackgroundColor="{StaticResource SeperatorGrey}">
+            <Editor Text="{Binding SelectedIncident.ReportDetails}" Margin="1" BackgroundColor="#ffffff"
+                    VerticalOptions="Fill"
+                    HorizontalOptions="Fill">
+            </Editor>
+        </Frame>
+        
+        <!-- Seperator -->
+        <BoxView Grid.Row="2" BackgroundColor="{StaticResource SeperatorGrey}" HeightRequest="2" Margin="0"
+                 HorizontalOptions="FillAndExpand" />
+        
+        <StackLayout Grid.Row="3" Orientation="Horizontal" VerticalOptions="Fill" HorizontalOptions="EndAndExpand">
+            <Button Margin="3" WidthRequest="100" HeightRequest="50" Text="SAVE"
+                    BackgroundColor="CornflowerBlue" TextColor="White"
+                    Command="{Binding SaveCommand}"  />
+            <Button Margin="3" WidthRequest="100" HeightRequest="50" Text="CANCEL"
+                    BackgroundColor="CornflowerBlue"  TextColor="White"
+                    Command="{Binding CancelCommand}"  />
+        </StackLayout>
+        
+    </Grid>
+</ContentPage>
